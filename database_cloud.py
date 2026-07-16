@@ -1,3 +1,4 @@
+import streamlit as s
 import firebase_admin
 from firebase_admin import credentials, db
 
@@ -5,12 +6,10 @@ from firebase_admin import credentials, db
 DATABASE_URL = "https://coopcheckinsystem-default-rtdb.firebaseio.com/"
 
 def init_firebase():
-    try:
-        firebase_admin.get_app()
-    except ValueError:
-        cred = credentials.Certificate("firebase_service_account.json")
+    if not firebase_admin._apps:
+        cred = credentials.Certificate(st.secrets["firebase"])
         firebase_admin.initialize_app(cred, {
-            "databaseURL": DATABASE_URL
+            "databaseURL": st.secrets["firebase"]["databaseURL"]
         })
 
 def cloud_set_student(student_id, data):
