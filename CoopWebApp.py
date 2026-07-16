@@ -296,3 +296,4 @@ elif page == "Settings":
             with colB:
                 if st.button("Cancel Delete"):
                     st.info("Deletion cancelled.")
+
