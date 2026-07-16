@@ -86,3 +86,20 @@ def cloud_log_attendance(student_id, data):
         }
     """
     db.reference(f"attendance/{student_id}").push(data)
+
+# ---------------------------------------------------------
+#  DELETE STUDENT (FULL WIPE)
+# ---------------------------------------------------------
+
+def cloud_delete_student(student_id):
+    """
+    Deletes a student's entire record from Firebase:
+    - student profile
+    - status
+    - attendance logs
+    """
+
+    db.reference(f"students/{student_id}").delete()
+    db.reference(f"status/{student_id}").delete()
+    db.reference(f"attendance/{student_id}").delete()
+
