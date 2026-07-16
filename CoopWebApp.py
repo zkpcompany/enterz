@@ -11,6 +11,7 @@ from database_cloud import (
     cloud_get_student,
     clear_all_statuses,
 )
+
 from student_manager import create_student
 from checkin_station import auto_check
 
@@ -217,7 +218,6 @@ elif page == "Analytics":
 # ---------------- SETTINGS ---------------- #
 elif page == "Settings":
     st.title("⚙️ Settings")
-    st.info("System settings coming soon!")
 
     # Admin login section
     if not admin_check():
@@ -225,7 +225,7 @@ elif page == "Settings":
         password = st.text_input("Enter admin password:", type="password")
 
         if st.button("Login"):
-            if password == "coopadmin123":  # <-- change this to your real password
+            if password == "coopadmin123":
                 admin_login()
                 st.success("Admin logged in!")
             else:
@@ -234,6 +234,7 @@ elif page == "Settings":
 
     st.subheader("Danger Zone")
 
+    # Clear all statuses
     if st.button("Clear All Check-In Statuses"):
         st.warning("Are you sure you want to clear ALL check-in statuses? This cannot be undone.")
 
@@ -248,45 +249,45 @@ elif page == "Settings":
             if st.button("Cancel"):
                 st.info("Cancelled. No changes made.")
 
-# ---------------- DELETE SPECIFIC STUDENT ---------------- #
-st.subheader("Delete Specific Student")
+    st.divider()
 
-# Load all students
-all_students = db.reference("students").get() or {}
+    # ---------------- DELETE SPECIFIC STUDENT ---------------- #
+    st.subheader("Delete Specific Student")
 
-if not all_students:
-    st.info("No students available to delete.")
-else:
-    # Dropdown list of students
-    student_options = {
-        f"{data['name']} (ID: {sid})": sid
-        for sid, data in all_students.items()
-    }
+    from firebase_admin import db
+    all_students = db.reference("students").get() or {}
 
-    selected = st.selectbox("Select a student to delete:", list(student_options.keys()))
+    if not all_students:
+        st.info("No students available to delete.")
+    else:
+        student_options = {
+            f"{data['name']} (ID: {sid})": sid
+            for sid, data in all_students.items()
+        }
 
-    if st.button("Delete Student"):
-        sid = student_options[selected]
+        selected = st.selectbox("Select a student to delete:", list(student_options.keys()))
 
-        st.warning(f"Are you sure you want to DELETE {selected}? This cannot be undone.")
+        if st.button("Delete Student"):
+            sid = student_options[selected]
 
-        colA, colB = st.columns(2)
+            st.warning(f"Are you sure you want to DELETE {selected}? This cannot be undone.")
 
-        with colA:
-            if st.button("Yes, delete"):
-                from database_cloud import cloud_delete_student
+            colA, colB = st.columns(2)
 
-                # Delete Firebase data
-                cloud_delete_student(sid)
+            with colA:
+                if st.button("Yes, delete"):
+                    from database_cloud import cloud_delete_student
 
-                # Delete local photo if exists
-                import os
-                photo_path = all_students[sid].get("photo_path", "")
-                if photo_path and os.path.exists(photo_path):
-                    os.remove(photo_path)
+                    cloud_delete_student(sid)
 
-                st.success(f"{selected} has been deleted from the system.")
+                    import os
+                    photo_path = all_students[sid].get("photo_path", "")
+                    if photo_path and os.path.exists(photo_path):
+                        os.remove(photo_path)
 
-        with colB:
-            if st.button("Cancel Delete"):
-                st.info("Deletion cancelled.")
+                    st.success(f"{selected} has been deleted from the system.")
+
+            with colB:
+                if st.button("Cancel Delete"):
+                    st.info("Deletion cancelled.")
+
