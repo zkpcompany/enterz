@@ -1,18 +1,11 @@
 from datetime import datetime
-from database_cloud import cloud_set_status, cloud_log_attendance, cloud_get_all_statuses
+from database_cloud import cloud_set_status, cloud_log_attendance, cloud_get_all_statuses, cloud_set_student
 from student_manager import get_student
 
 
 def auto_check(student_id):
     """
     Auto check-in / check-out logic using Firebase only.
-
-    Firebase structure:
-        status/{student_id} = "Checked In" or "Checked Out"
-
-    Behavior:
-    - If status is missing or "Checked Out" → CHECK-IN
-    - If status is "Checked In" → CHECK-OUT
     """
 
     # Get student info
@@ -36,7 +29,9 @@ def auto_check(student_id):
 
         if not checkin_time:
             # If missing, treat as fresh check-in
+            checkin_time = now
             student["last_checkin"] = now
+            cloud_set_student(student_id, student)
             cloud_set_status(student_id, "Checked In")
             return {
                 "status": "checkin",
@@ -73,6 +68,7 @@ def auto_check(student_id):
     else:
         # Save check-in time inside student record
         student["last_checkin"] = now
+        cloud_set_student(student_id, student)
 
         # Update Firebase status
         cloud_set_status(student_id, "Checked In")
