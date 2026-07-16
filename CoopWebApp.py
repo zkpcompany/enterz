@@ -62,34 +62,37 @@ if page == "Check-In Station":
     st.subheader("📷 Mobile QR Scanner")
 
     # MOBILE CAMERA QR SCAN
-    
-    import cv2
-    import numpy as np
-    from pyzbar.pyzbar import decode
 
-    img = st.camera_input("Scan QR Code")
+import cv2
+import numpy as np
 
-    if img is not None:
-        # Convert to OpenCV image
-        file_bytes = np.asarray(bytearray(img.read()), dtype=np.uint8)
-        frame = cv2.imdecode(file_bytes, 1)
+st.subheader("📷 Mobile QR Scanner")
 
-        # Decode QR
-        decoded = decode(frame)
-        if decoded:
-            qr_data = decoded[0].data.decode("utf-8")
-            st.success(f"QR Detected: {qr_data}")
+img = st.camera_input("Scan QR Code")
 
-            result = auto_check(qr_data)
+if img is not None:
+    # Convert to OpenCV image
+    file_bytes = np.asarray(bytearray(img.read()), dtype=np.uint8)
+    frame = cv2.imdecode(file_bytes, cv2.IMREAD_COLOR)
 
-            if result["status"] == "checkin":
-                st.success(f"{result['student']['name']} checked in at {result['time']}")
-            elif result["status"] == "checkout":
-                st.error(f"{result['student']['name']} checked out\nDuration: {result['duration']}")
-            else:
-                st.warning(result["message"])
+    # Decode QR using OpenCV (no pyzbar needed)
+    detector = cv2.QRCodeDetector()
+    qr_data, points, _ = detector.detectAndDecode(frame)
+
+    if qr_data:
+        st.success(f"QR Detected: {qr_data}")
+
+        result = auto_check(qr_data)
+
+        if result["status"] == "checkin":
+            st.success(f"{result['student']['name']} checked in at {result['time']}")
+        elif result["status"] == "checkout":
+            st.error(f"{result['student']['name']} checked out\nDuration: {result['duration']}")
         else:
-            st.warning("No QR code detected yet — hold it steady in front of the camera.")
+            st.warning(result["message"])
+    else:
+        st.warning("No QR code detected yet — hold it steady in front of the camera.")
+
 
 
 # ---------------- TEACHER DASHBOARD ---------------- #
