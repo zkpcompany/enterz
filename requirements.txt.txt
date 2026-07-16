@@ -1,0 +1,7 @@
+streamlit
+firebase_admin
+opencv-python
+pyzbar
+numpy
+Pillow
+qrcode
