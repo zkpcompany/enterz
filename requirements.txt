@@ -1,6 +1,6 @@
 streamlit
 firebase_admin
-opencv-python
+opencv-python-headless
 pyzbar
 numpy
 Pillow
