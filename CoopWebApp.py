@@ -78,7 +78,7 @@ st.sidebar.title("📘 Menu")
 
 page = st.sidebar.radio(
     "Go to:",
-    ["Check-In Station", "Teacher Dashboard", "Admin Panel", "Analytics", "Settings"]
+    ["Check-In Station", "Dashboard", "Create a Student", "Analytics", "Settings"]
 )
 
 
