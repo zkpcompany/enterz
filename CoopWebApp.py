@@ -20,10 +20,20 @@ from checkin_station import auto_check
 init_firebase()
 
 st.set_page_config(
-    page_title="Co-Op Check-In System",
+    page_title="Welcome to Enterz App",
     page_icon="🟦",
     layout="wide"
 )
+
+st.markdown(
+    """
+    <div style="text-align:center;">
+        <img src="https://raw.githubusercontent.com/zkpcompany/coop-attendance-app/main/logo.png" width="180">
+    </div>
+    """,
+    unsafe_allow_html=True
+)
+
 
 
 # ---------------- ADMIN AUTH ---------------- #
