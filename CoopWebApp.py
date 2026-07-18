@@ -47,7 +47,7 @@ st.markdown(
         position: relative;
         top: -50px;
     ">
-        <img src="https://raw.githubusercontent.com/zkpcompany/enterz/main/EnterzLogo.png"
+        <img src="static/EnterzLogo.png"
              style="height: 50px; margin-right: 12px;">
         <span style="
             font-size: 28px;
