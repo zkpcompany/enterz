@@ -17,7 +17,7 @@ def init_firebase():
         cred = credentials.Certificate(firebase_config)
 
         firebase_admin.initialize_app(cred, {
-            "databaseURL": firebase_config["databaseURL"]
+            "databaseURL": firebase_config["database_url"]
         })
 
 
