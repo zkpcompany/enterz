@@ -27,6 +27,15 @@ st.set_page_config(
 
 st.markdown(
     """
+    <link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" href="apple-touch-icon.png">
+    """,
+    unsafe_allow_html=True
+)
+
+
+st.markdown(
+    """
     <div style="
         width: 100%;
         display: flex;
