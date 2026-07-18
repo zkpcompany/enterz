@@ -131,7 +131,7 @@ if page == "Check-In Station":
 
 
 # ---------------- TEACHER DASHBOARD ---------------- #
-elif page == "Teacher Dashboard":
+elif page == "Dashboard":
     st.title("📊 Dashboard")
 
     statuses = cloud_get_all_statuses() or {}
