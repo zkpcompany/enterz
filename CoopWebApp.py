@@ -27,45 +27,29 @@ st.set_page_config(
 
 st.markdown(
     """
-    <style>
-        /* Remove Streamlit default padding */
-        .block-container {
-            padding-top: 0rem !important;
-        }
-
-        /* Header container */
-        .enterz-header {
-            width: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 12px 0;
-            background-color: #ffffff;
-            border-bottom: 1px solid #e6e6e6;
-        }
-
-        .enterz-header img {
-            height: 50px;
-            margin-right: 12px;
-        }
-
-        .enterz-title {
+    <div style="
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 12px 0;
+        background-color: white;
+        border-bottom: 1px solid #e6e6e6;
+        position: relative;
+        top: -50px;
+    ">
+        <img src="https://raw.githubusercontent.com/zkpcompany/coop-attendance-app/main/EnterzLogo.png"
+             style="height: 50px; margin-right: 12px;">
+        <span style="
             font-size: 28px;
             font-weight: 600;
-            font-family: 'Arial', sans-serif;
+            font-family: Arial, sans-serif;
             letter-spacing: 1px;
-        }
-    </style>
-
-    <div class="enterz-header">
-        <img src="https://raw.githubusercontent.com/zkpcompany/coop-attendance-app/main/EnterzLogo.png">
-        <span class="enterz-title">ENTERZ</span>
+        ">ENTERZ</span>
     </div>
     """,
     unsafe_allow_html=True
 )
-
-
 
 # ---------------- ADMIN AUTH ---------------- #
 def admin_login():
