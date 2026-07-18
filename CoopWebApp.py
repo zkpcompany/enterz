@@ -217,7 +217,7 @@ elif page == "Teacher Dashboard":
 
 
 # ---------------- ADMIN PANEL ---------------- #
-elif page == "Admin Panel":
+elif page == "Add a Student":
     st.title("🛠️ Create Student")
 
     name = st.text_input("Student Name")
