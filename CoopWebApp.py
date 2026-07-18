@@ -212,7 +212,7 @@ elif page == "Admin Panel":
     st.title("🛠️ Create Student")
 
     name = st.text_input("Student Name")
-    grade = st.text_input("Grade")
+    grade = st.text_input("Grade (No Prefixes)")
     photo = st.file_uploader("Upload Photo (optional)", type=["png", "jpg", "jpeg"])
 
     if st.button("Create Student"):
