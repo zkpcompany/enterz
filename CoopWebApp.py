@@ -20,8 +20,8 @@ from checkin_station import auto_check
 init_firebase()
 
 st.set_page_config(
-    page_title="Welcome to Enterz App",
-    page_icon="🟦",
+    page_title="Enterz",
+    page_icon="EnterzLogo.png",
     layout="wide"
 )
 
