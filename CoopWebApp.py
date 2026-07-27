@@ -14,6 +14,8 @@ from database_cloud import (
 
 from student_manager import create_student
 from checkin_station import auto_check
+from bulk_import import bulk_import_students
+from qr_export import export_qr_zip
 
 
 # ---------------- INIT SYSTEM ---------------- #
@@ -241,6 +243,25 @@ elif page == "Create Student":
         buf = io.BytesIO()
         qr.save(buf)
         st.image(buf.getvalue(), caption="Student QR Code")
+
+    st.divider()
+    st.subheader("📥 Bulk Import Students")
+
+    uploaded_file = st.file_uploader("Upload CSV", type=["csv"])
+
+    if uploaded_file:
+        students = bulk_import_students(uploaded_file)
+        st.success(f"Imported {len(students)} students!")
+
+        # Generate ZIP containing all QR codes + CSV
+        zip_bytes = export_qr_zip(students)
+
+        st.download_button(
+            label="Download All QR Codes + CSV",
+            data=zip_bytes,
+            file_name="students_qr_export.zip",
+            mime="application/zip"
+        )
 
 
 # ---------------- ANALYTICS ---------------- #
