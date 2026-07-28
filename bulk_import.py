@@ -32,6 +32,18 @@ def bulk_import_students(csv_file):
     students = []
 
     for _, row in df.iterrows():
+
+        # ⭐ Skip empty or incomplete rows
+        if (
+            pd.isna(row["First Name"]) or
+            pd.isna(row["Last Name"]) or
+            pd.isna(row["Grade"]) or
+            str(row["First Name"]).strip() == "" or
+            str(row["Last Name"]).strip() == "" or
+            str(row["Grade"]).strip() == ""
+        ):
+            continue
+
         # Build name from two columns
         raw_name = f"{row['First Name']} {row['Last Name']}"
         raw_grade = row["Grade"]
