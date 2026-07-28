@@ -288,7 +288,7 @@ elif page == "Dashboard":
 
 # ---------------- ADMIN PANEL ---------------- #
 elif page == "Create Student":
-    st.title("🛠️ Create Student")
+    st.title("🛠️ Create Student/Tutor")
 
     name = st.text_input("Student Name")
     grade = st.text_input("Grade (no prefixes)")
