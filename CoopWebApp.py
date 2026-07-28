@@ -282,6 +282,7 @@ elif page == "Create Student":
             file_name="students_qr_export.zip",
             mime="application/zip"
         )
+        
 # ---------------- STUDENT DIRECTORY ---------------- #
 elif page == "Student Directory":
     st.title("📇 Student Directory")
@@ -299,7 +300,7 @@ elif page == "Student Directory":
                 st.error("Incorrect password.")
         st.stop()
 
-    st.subheader("All Students (Last Name A → Z)")
+    st.subheader("All Students (Search + Last Name A → Z)")
 
     from firebase_admin import db
     import qrcode
@@ -310,12 +311,33 @@ elif page == "Student Directory":
     if not all_students:
         st.info("No students found.")
     else:
+        # ⭐ Search bar
+        search_query = st.text_input("Search students by name or ID:")
+
         # ⭐ SORT BY LAST NAME
         sorted_students = sorted(
             all_students.items(),
             key=lambda x: x[1]["name"].split()[-1].lower()
         )
 
+        # ⭐ FILTER RESULTS
+        if search_query:
+            search_query = search_query.lower()
+            sorted_students = [
+                (sid, data)
+                for sid, data in sorted_students
+                if search_query in data["name"].lower()
+                or search_query in sid.lower()
+            ]
+
+        # ⭐ Table headers
+        header1, header2, header3 = st.columns([3, 2, 2])
+        header1.write("### Name / ID")
+        header2.write("### QR Code")
+        header3.write("### Download")
+        st.divider()
+
+        # ⭐ Display rows
         for sid, data in sorted_students:
             name = data.get("name", "Unknown")
 
@@ -343,6 +365,7 @@ elif page == "Student Directory":
                 )
 
             st.divider()
+
 
 
 
