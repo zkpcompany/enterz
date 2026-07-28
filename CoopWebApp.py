@@ -249,7 +249,8 @@ elif page == "Create Student":
 
     uploaded_file = st.file_uploader("Upload CSV", type=["csv"])
 
-    if uploaded_file:
+    # Only import when button is pressed
+    if uploaded_file and st.button("Import Students"):
         students = bulk_import_students(uploaded_file)
         st.success(f"Imported {len(students)} students!")
 
@@ -262,6 +263,7 @@ elif page == "Create Student":
             file_name="students_qr_export.zip",
             mime="application/zip"
         )
+
 
 
 # ---------------- ANALYTICS ---------------- #
