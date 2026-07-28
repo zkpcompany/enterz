@@ -26,7 +26,7 @@ if not st.session_state["site_unlocked"]:
 
     password = st.text_input("Enter site password:", type="password")
 
-    if st.button("Unlock Site"):
+    if st.button("Let's Go!"):
         if password == "coopadmin123":
             st.session_state["site_unlocked"] = True
             st.success("Site unlocked!")
