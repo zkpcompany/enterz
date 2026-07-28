@@ -80,7 +80,7 @@ st.sidebar.title("📘 Menu")
 
 page = st.sidebar.radio(
     "Go to:",
-    ["Check-In Station", "Dashboard", "Create Student", "Analytics", "Settings"]
+    ["Check-In Station", "Dashboard", "Create Student", "Student Directory", "Analytics", "Settings"]
 )
 
 
@@ -263,7 +263,61 @@ elif page == "Create Student":
             file_name="students_qr_export.zip",
             mime="application/zip"
         )
+# ---------------- STUDENT DIRECTORY ---------------- #
+elif page == "Student Directory":
+    st.title("📇 Student Directory")
 
+    # Require admin login
+    if not admin_check():
+        st.subheader("Admin Login Required")
+        password = st.text_input("Enter admin password:", type="password")
+
+        if st.button("Login"):
+            if password == "coopadmin123":
+                admin_login()
+                st.success("Admin logged in!")
+            else:
+                st.error("Incorrect password.")
+        st.stop()
+        
+    st.subheader("All Students (Name + ID + QR Code)")
+
+    from firebase_admin import db
+    import qrcode
+    import io
+
+    all_students = db.reference("students").get() or {}
+
+    if not all_students:
+        st.info("No students found.")
+    else:
+        for sid, data in all_students.items():
+            name = data.get("name", "Unknown")
+
+            # Generate QR code image
+            qr = qrcode.make(sid)
+            buf = io.BytesIO()
+            qr.save(buf)
+            qr_bytes = buf.getvalue()
+
+            col1, col2, col3 = st.columns([3, 2, 2])
+
+            with col1:
+                st.write(f"**{name}**")
+                st.write(f"ID: `{sid}`")
+
+            with col2:
+                st.image(qr_bytes, width=120)
+
+            with col3:
+                st.download_button(
+                    label="Download QR",
+                    data=qr_bytes,
+                    file_name=f"{sid}.png",
+                    mime="image/png"
+                )
+
+            st.divider()
 
 
 # ---------------- ANALYTICS ---------------- #
