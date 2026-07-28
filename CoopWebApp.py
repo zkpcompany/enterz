@@ -448,7 +448,7 @@ elif page == "Settings":
     if st.button("Force Checkout Everyone"):
         count = force_checkout_all()
         st.success(f"Force checked out {count} students.")
-        st.experimental_rerun()
+        st.rerun()
     
     # Clear all statuses
     if st.button("Clear All Check-In Statuses"):
