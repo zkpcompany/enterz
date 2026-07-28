@@ -93,6 +93,55 @@ def admin_logout():
 def admin_check():
     return st.session_state.get("admin", False)
 
+from datetime import datetime
+from database_cloud import cloud_set_status, cloud_log_attendance, cloud_get_all_statuses, cloud_set_student
+from student_manager import get_student
+
+def force_checkout_all():
+    statuses = cloud_get_all_statuses() or {}
+    now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+    count = 0
+
+    for student_id, status in statuses.items():
+        if status == "Checked In":
+            student = get_student(student_id)
+            checkin_time = student.get("last_checkin")
+
+            if not checkin_time:
+                continue
+
+            # Calculate duration
+            t1 = datetime.strptime(checkin_time, "%Y-%m-%d %H:%M:%S")
+            t2 = datetime.strptime(now, "%Y-%m-%d %H:%M:%S")
+
+            minutes_total = (t2 - t1).seconds // 60
+            hours = minutes_total // 60
+            minutes = minutes_total % 60
+
+            if hours > 0:
+                duration = f"{hours} hour{'s' if hours != 1 else ''} {minutes} minute{'s' if minutes != 1 else ''}"
+            else:
+                duration = f"{minutes} minute{'s' if minutes != 1 else ''}"
+
+            # Log attendance
+            cloud_log_attendance(student_id, {
+                "checkin": checkin_time,
+                "checkout": now,
+                "duration": duration
+            })
+
+            # Update status
+            cloud_set_status(student_id, "Checked Out")
+
+            # Clear last checkin
+            student["last_checkin"] = None
+            cloud_set_student(student_id, student)
+
+            count += 1
+
+    return count
+
 
 # ---------------- SIDEBAR NAVIGATION ---------------- #
 st.sidebar.title("📘 Menu")
@@ -394,6 +443,13 @@ elif page == "Settings":
 
     st.subheader("Danger Zone")
 
+    st.subheader("Force Checkout All Students")
+
+    if st.button("Force Checkout Everyone"):
+        count = force_checkout_all()
+        st.success(f"Force checked out {count} students.")
+        st.experimental_rerun()
+    
     # Clear all statuses
     if st.button("Clear All Check-In Statuses"):
         st.warning("Are you sure you want to clear ALL check-in statuses? This cannot be undone.")
@@ -412,6 +468,7 @@ elif page == "Settings":
 
     st.divider()
 
+    
     # ---------------- DELETE SPECIFIC STUDENT ---------------- #
     st.subheader("Delete Specific Student")
 
