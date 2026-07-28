@@ -279,8 +279,8 @@ elif page == "Student Directory":
             else:
                 st.error("Incorrect password.")
         st.stop()
-        
-    st.subheader("All Students (Name + ID + QR Code)")
+
+    st.subheader("All Students (Last Name A → Z)")
 
     from firebase_admin import db
     import qrcode
@@ -291,7 +291,13 @@ elif page == "Student Directory":
     if not all_students:
         st.info("No students found.")
     else:
-        for sid, data in all_students.items():
+        # ⭐ SORT BY LAST NAME
+        sorted_students = sorted(
+            all_students.items(),
+            key=lambda x: x[1]["name"].split()[-1].lower()
+        )
+
+        for sid, data in sorted_students:
             name = data.get("name", "Unknown")
 
             # Generate QR code image
@@ -318,6 +324,7 @@ elif page == "Student Directory":
                 )
 
             st.divider()
+
 
 
 # ---------------- ANALYTICS ---------------- #
