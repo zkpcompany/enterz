@@ -17,6 +17,25 @@ from checkin_station import auto_check
 from bulk_import import bulk_import_students
 from qr_export import export_qr_zip
 
+# ---------------- GLOBAL SITE LOCK ---------------- #
+if "site_unlocked" not in st.session_state:
+    st.session_state["site_unlocked"] = False
+
+if not st.session_state["site_unlocked"]:
+    st.title("🔒 Enterz Access Required")
+
+    password = st.text_input("Enter site password:", type="password")
+
+    if st.button("Unlock Site"):
+        if password == "coopadmin123":
+            st.session_state["site_unlocked"] = True
+            st.success("Site unlocked!")
+            st.experimental_rerun()
+        else:
+            st.error("Incorrect password.")
+
+    st.stop()
+
 
 # ---------------- INIT SYSTEM ---------------- #
 init_firebase()
