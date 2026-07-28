@@ -12,19 +12,25 @@ def normalize_name(name):
     return name.strip()
 
 def clean_grade(grade):
-    """Convert grade text into a clean numeric grade."""
-    grade = str(grade).strip()
+    """Convert grade text into a clean standardized grade."""
+    grade = str(grade).strip().lower()
 
-    # Handle special cases
-    lower = grade.lower()
-    if "pre" in lower:
-        return "PK"
-    if "k" in lower:
-        return "K"
+    # --- Early Childhood Grades ---
+    if "pre-school" in grade or "preschool" in grade or "pre school" in grade:
+        return "PS"   # Pre-School
 
-    # Remove suffixes like 'th', 'rd', 'nd'
+    if "pre-k" in grade or "pre k" in grade or "prekindergarten" in grade or "pre kindergarten" in grade:
+        return "PK"   # Pre-K
+
+    if "kindergarten" in grade or grade == "k":
+        return "K"    # Kindergarten
+
+    # --- Numeric Grades (1st, 2nd, 10th, etc.) ---
     cleaned = re.sub(r"\D", "", grade)
-    return cleaned if cleaned else grade
+    if cleaned:
+        return cleaned
+
+    return grade.upper()
 
 def bulk_import_students(csv_file):
     df = pd.read_csv(csv_file)
