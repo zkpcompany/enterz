@@ -441,8 +441,6 @@ elif page == "Settings":
                 st.error("Incorrect password.")
         st.stop()
 
-    st.subheader("Danger Zone")
-
     st.subheader("Force Checkout All Students")
 
     if st.button("Force Checkout Everyone"):
