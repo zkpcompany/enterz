@@ -352,3 +352,30 @@ elif page == "Settings":
                 if st.button("Cancel Delete"):
                     st.info("Deletion cancelled.")
 
+    # ---------------- BULK DELETE STUDENTS ---------------- #
+    st.divider()
+    st.subheader("Bulk Delete Students")
+
+    from firebase_admin import db
+    all_students = db.reference("students").get() or {}
+
+    if not all_students:
+        st.info("No students available to delete.")
+    else:
+        # Multi-select list
+        student_options = {
+            f"{data.get('name', 'UNKNOWN')} (ID: {sid})": sid
+            for sid, data in all_students.items()
+        }
+
+        selected = st.multiselect("Select students to delete:", list(student_options.keys()))
+
+        if st.button("Delete Selected Students"):
+            from database_cloud import cloud_delete_student
+
+            for item in selected:
+                sid = student_options[item]
+                cloud_delete_student(sid)
+
+            st.success(f"Deleted {len(selected)} students.")
+            st.experimental_rerun()
