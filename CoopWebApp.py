@@ -30,7 +30,7 @@ if not st.session_state["site_unlocked"]:
         if password == "coopadmin123":
             st.session_state["site_unlocked"] = True
             st.success("Site unlocked!")
-            st.experimental_rerun()
+            st.rerun()
         else:
             st.error("Incorrect password.")
 
