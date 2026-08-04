@@ -180,7 +180,7 @@ if page == "Check-In Station":
                 st.warning(result["message"])
 
     st.divider()
-    st.subheader("📷 Mobile QR Scanner")
+    st.subheader("📷 Welcome!")
 
     # MOBILE CAMERA QR SCAN
     img = st.camera_input("Scan QR Code")
