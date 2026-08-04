@@ -46,6 +46,15 @@ st.set_page_config(
     layout="wide"
 )
 
+hide_github = """
+<style>
+#MainMenu {visibility: hidden;}
+footer {visibility: hidden;}
+header {visibility: hidden;}
+</style>
+"""
+st.markdown(hide_github, unsafe_allow_html=True)
+
 st.markdown(
     """
     <link rel="manifest" href="static/manifest.json">
