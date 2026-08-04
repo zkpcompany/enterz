@@ -39,21 +39,18 @@ def auto_check(student_id):
                 "time": now
             }
 
-        
-            # Calculate duration
-            t1 = datetime.strptime(checkin_time, "%Y-%m-%d %H:%M:%S")
-            t2 = datetime.strptime(now, "%Y-%m-%d %H:%M:%S")
+        # ✅ Calculate duration (moved out of the inner block)
+        t1 = datetime.strptime(checkin_time, "%Y-%m-%d %H:%M:%S")
+        t2 = datetime.strptime(now, "%Y-%m-%d %H:%M:%S")
 
-            minutes_total = (t2 - t1).seconds // 60
-            hours = minutes_total // 60
-            minutes = minutes_total % 60
+        minutes_total = (t2 - t1).seconds // 60
+        hours = minutes_total // 60
+        minutes = minutes_total % 60
 
-            # Format cleanly
-            if hours > 0:
-                duration = f"{hours} hour{'s' if hours != 1 else ''} {minutes} minute{'s' if minutes != 1 else ''}"
-            else:
-                duration = f"{minutes} minute{'s' if minutes != 1 else ''}"
-
+        if hours > 0:
+            duration = f"{hours} hour{'s' if hours != 1 else ''} {minutes} minute{'s' if minutes != 1 else ''}"
+        else:
+            duration = f"{minutes} minute{'s' if minutes != 1 else ''}"
 
         # Update Firebase status
         cloud_set_status(student_id, "Checked Out")
@@ -76,11 +73,8 @@ def auto_check(student_id):
     # CHECK-IN LOGIC
     # ---------------------------------------------------------
     else:
-        # Save check-in time inside student record
         student["last_checkin"] = now
         cloud_set_student(student_id, student)
-
-        # Update Firebase status
         cloud_set_status(student_id, "Checked In")
 
         return {
