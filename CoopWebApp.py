@@ -17,14 +17,14 @@ from checkin_station import auto_check
 from bulk_import import bulk_import_students
 from qr_export import export_qr_zip
 
-hide_github = """
-<style>
+#hide_github = """
+#<style>
 #MainMenu {visibility: hidden;}
-footer {visibility: hidden;}
-header {visibility: hidden;}
-</style>
-"""
-st.markdown(hide_github, unsafe_allow_html=True)
+#footer {visibility: hidden;}
+#header {visibility: hidden;}
+#</style>
+#"""
+#st.markdown(hide_github, unsafe_allow_html=True)
 
 # ---------------- GLOBAL SITE LOCK ---------------- #
 if "site_unlocked" not in st.session_state:
